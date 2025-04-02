@@ -9,6 +9,16 @@ public class RigidbodyMovement : MonoBehaviour
     Vector2 move;
     Rigidbody2D rb;
 
+    private void OnEnable()
+    {
+        InputManager.OnMove += Move;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.OnMove -= Move;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
