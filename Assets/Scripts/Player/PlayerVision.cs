@@ -7,6 +7,8 @@ public class PlayerVision : MonoBehaviour
 {
     [SerializeField] SpriteRenderer sr_vision;
 
+    [SerializeField] bool IsActive;
+
     private void OnEnable()
     {
         InputManager.OnVision += vision;
@@ -29,12 +31,14 @@ public class PlayerVision : MonoBehaviour
         //si es true hacer un lerp para que el escenario se vea
         if (_generate)
         {
+            IsActive = true;
             for (float i = 0; i < 1.5f; i += Time.deltaTime)
             {
                 value = Mathf.Lerp(value, 0f, i/1.5f);
                 sr_vision.color = new Color(0,0,0,value);
                 yield return null;
             }
+            IsActive = true;
         }
 
 
@@ -42,6 +46,7 @@ public class PlayerVision : MonoBehaviour
 
         if (!_generate)
         {
+            IsActive = false;
             for (float i = 0; i < 1.5f; i += Time.deltaTime)
             {
                 value = Mathf.Lerp(value, 255f, i/1.5f);
@@ -50,5 +55,20 @@ public class PlayerVision : MonoBehaviour
             }
         }
     }
+
+    void GetDamage(int damage)
+    {
+        //hacer el daño al health manager
+    }
+
+    void CalculateDamage()
+    {
+        //preguntar al enemy manager cuantos enemigos hay en la escena
+
+        //aplicarle un multiplicador dependiendo de la dificultad actual
+
+        //usar ese numero en el GetDamage
+    }
+
 }
     
