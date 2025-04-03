@@ -19,6 +19,8 @@ public class InputManager : MonoBehaviour
 
     public static event System.Action OnPause;
 
+    public static event System.Action<bool> OnVision;
+
     public static ControlScheme CurrentScheme {get; private set;}
 
     public static System.Action<ControlScheme> onSchemeSwitch;
@@ -46,6 +48,7 @@ public class InputManager : MonoBehaviour
 
         TryInvokeMove(context);
         TryInvokePause(context);
+        TryInvokeVision(context);
     }
 
     void CheckControlScheme()
@@ -80,5 +83,19 @@ public class InputManager : MonoBehaviour
         if (context.action.name != "Pause") return;
 
         OnPause?.Invoke();
+    }
+
+    void TryInvokeVision(InputAction.CallbackContext context)
+    {
+        if (context.action.name != "Attack") return;
+
+        if(context.started)
+        {
+            OnVision?.Invoke(true);
+        }
+        else if(context.canceled)
+        {
+            OnVision?.Invoke(false);
+        }
     }
 }
