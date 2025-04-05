@@ -38,10 +38,19 @@ public class EnemyMovement : MonoBehaviour
     void movement()
     {
         //crear un vector2 a partir de numeros random entre los limites del nivel actual
-        float x = Random.Range(EnemyManager.instance.limits[0], EnemyManager.instance.limits[1]); 
-        float y = Random.Range(EnemyManager.instance.limits[2], EnemyManager.instance.limits[3]);
+        float x = Random.Range(-5, 5f); 
+        float y = Random.Range(-5, 5f);
         
         direction = new Vector2(x, y);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Vector3.Distance(transform.position, direction));
+
+        Debug.DrawLine(transform.position, hit.point);
+
+        if(hit.collider != null)
+        {
+            direction = hit.point;
+        }
 
     }
 
