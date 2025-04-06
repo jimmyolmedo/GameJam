@@ -6,10 +6,15 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] bool isMoving;
     Vector2 direction;
+    Collider2D wallCollider;//se guardara el collider de la pared por si choca
+
+    private void Awake()
+    {
+        EnemyManager.instance.AddEnemy(this);
+    }
 
     private void Start()
     {
-        EnemyManager.instance.AddEnemy(this);
         StartCoroutine(WaitingToMove());
     }
 
@@ -27,8 +32,11 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
+        
+
         if(isMoving)
         {
+            if(GameManager.CurrentState != GameState.Gameplay) { return; }
             transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime);
         }
 
@@ -39,7 +47,7 @@ public class EnemyMovement : MonoBehaviour
     {
         //crear un vector2 a partir de numeros random entre los limites del nivel actual
         float x = Random.Range(-5, 5f); 
-        float y = Random.Range(-5, 5f);
+        float y = Random.Range(-5, 5);
         
         direction = new Vector2(x, y);
 
@@ -47,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
 
         Debug.DrawLine(transform.position, hit.point);
 
-        if(hit.collider != null)
+        if(hit.collider != null && hit.collider != this.transform.GetComponent<Collider2D>())
         {
             direction = hit.point;
         }

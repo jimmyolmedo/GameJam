@@ -23,11 +23,24 @@ public class GirlFriend : Singleton<GirlFriend>
         base.Awake();
     }
 
+    private void Update()
+    {
+        Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, .7f);
+
+        foreach (Collider2D col in collider)
+        {
+            if(col.TryGetComponent(out PlayerVision player))
+            {
+                EncounterPlayer();
+            }
+        }
+    }
     //funcion para cuando el jugador llega a ella antes de que se acabe el tiempo, hace que el spawner sume un contador para spawnear y luego se cambiara a otra ubicacion
 
     public void EncounterPlayer()
     {
-        //comunicarse con el health manager para sumarle vida al jugador en funcion al tiempo restante
+        //activar evento de c# para que otros script actuen cuando el jugador encuentra a la novia
+        OnActive?.Invoke();
 
         //cambiar la ubicacion
         ChangeUbication();
@@ -37,10 +50,8 @@ public class GirlFriend : Singleton<GirlFriend>
 
     void NotEncounterPlayer()
     {
-        //comuncarse con el health manager para quitar vida al jugador
-
-        //cambiar la ubicacion
-        ChangeUbication();
+        //cambiar el estado del juego a GameOver
+        GameManager.SwitchState(GameState.GameOver);
     }
 
     //funcion para cambiar de ubicacion
@@ -52,5 +63,11 @@ public class GirlFriend : Singleton<GirlFriend>
 
         //transportarse a dicha ubicacion
         transform.position = ubications[index].position;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, .7f);
     }
 }

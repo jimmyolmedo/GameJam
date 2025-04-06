@@ -27,6 +27,8 @@ public class RigidbodyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.CurrentState != GameState.Gameplay) { return; }
+
         rb.linearVelocity = new Vector2 (move.x, move.y) * speed * Time.deltaTime;
     }
 
